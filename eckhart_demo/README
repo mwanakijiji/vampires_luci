@@ -1,0 +1,16 @@
+Each file is labelled something like: vis_4_2_A_bs_t.npy - these are the visibilities for each frame (there are 800 frames ish in each file, and 153 baselines), as extracted by AMICAL (sparing you the gorey details of this package for now, it consumed about 6 months of my thesis :face_with_peeking_eye:)
+
+In the file names vis_4_2_A…, 4 is the file number, 1/2 is the camera number, and A/B is the FLC state.
+
+Numbers 0,4,8 etc are HWP 0, files 1,5,9 are HWP 22.5, files 2,6,10 are HWP 45, and files 3,7,11 are HWP 66.5.
+
+HWPs 0 and 45 give us Stokes Q and 22.5 and 66.5 give us Stokes U.
+
+With this information you should be able to ‘bake out’ each set of 8 files to make one Stokes Q or U (16 files total for Stokes Q and Stokes U).
+
+You can do the averaging however you like, I can look up exactly how I did it later but I calculated errors using bootstrapping for each visibility.
+
+If you want information from the headers of the original files, see:
+‘/Volumes/Morgana2/snert/VAMPIRESData/201810/20181023/’
+
+Files starting with: ‘muCep_05_20181023_750-50_18holeNudged_’ and will end with something like ‘00_cam1.fits’
