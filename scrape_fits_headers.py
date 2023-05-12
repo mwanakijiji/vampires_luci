@@ -21,8 +21,8 @@ import os
 
 file_name_csv_write = 'test.txt'
 
-stem = '/Users/bandari/Documents/git.repos/vampires_luci/'
-#stem = '/import/morgana2/snert/VAMPIRESData/201810/20181023/'
+#stem = '/Users/bandari/Documents/git.repos/vampires_luci/'
+stem = '/import/morgana2/snert/VAMPIRESData/201810/20181023/'
 
 file_names = glob.glob(stem + '*.fits')
 
