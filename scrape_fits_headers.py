@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
 # This notebook scrapes meta-data from LBTI FITS headers
 # by E.S.
 
@@ -14,68 +11,44 @@
 # 4. Add a column to the dataframe showing the frame number (this may be useful later)
 # 5. Write out a final machine-readable csv file (which includes the column of frame numbers)
 
-
-# In[37]:
-
-
 ## import stuff
 
 import glob
 import copy
-
-'''
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib.dates import DateFormatter
-import numpy as np
-import pandas as pd
-import datetime
 from astropy.io import fits
-import asciitable
-'''
-
-
-# In[18]:
-
+import pandas as pd
+import os
 
 file_name_csv_write = 'test.txt'
 
-
-# In[11]:
-
-
 stem = '/Users/bandari/Documents/git.repos/vampires_luci/'
-
-
-# In[12]:
-
+#stem = '/import/morgana2/snert/VAMPIRESData/201810/20181023/'
 
 file_names = glob.glob(stem + '*.fits')
 
-
-# In[13]:
-
-
-file_names
-
-
-# In[47]:
-
+# for merging 2 dictionaries
+def Merge(dict1, dict2):
+    res = dict1 | dict2
+    return res
 
 ## read in a file and extract a meta-data field from the FITS header
-
 # loop over files and read in data
 for f in range(0,len(file_names)):
     
     file_name_this = file_names[f]
         
     print('Reading in header info from frame '+str(file_name_this)+'...')
-    image, header = fits.getdata(file_name_this,
-                                 0,
-                                 header=True)
+
+    # assumes 2 headers
+    header0 = fits.getheader(file_name_this,ext=0)
+    header1 = fits.getheader(file_name_this,ext=1)
     
-    dict_header_this = {key:[header[key]] for key in header}
-    print(dict_header_this.keys())
+    dict_header_this0 = {key:[header0[key]] for key in header0}
+    dict_header_this1 = {key:[header1[key]] for key in header1}
+    dict_header_this = Merge(dict_header_this0, dict_header_this1)
+
+    # append file name too
+    dict_header_this['file_name'] = os.path.basename(file_name_this)
     
     if f==0:
         
@@ -87,15 +60,8 @@ for f in range(0,len(file_names)):
         df_master = df_master.append(df_this, ignore_index=True)
 
 
-# In[10]:
-
-
 # write out final machine-readable csv table
-
-df.to_csv(file_name_csv_write, sep="|")
-
-
-# In[10]:
+df_master.to_csv(file_name_csv_write, sep="|")
 
 
 # parse the times
